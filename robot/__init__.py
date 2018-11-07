@@ -46,7 +46,7 @@ from dynamics import *
 #from stanford import *
 #from twolink import *
 
-print """
+print("""
 Robotics Toolbox for Python
 Based on Matlab Toolbox Version 7  April-2002
 
@@ -117,4 +117,4 @@ Creation of robot models.
   robot       - construct a robot object 
   stanford    - Stanford arm data 
   twolink     - simple 2-link example 
-"""
+""")
