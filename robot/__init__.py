@@ -7,7 +7,7 @@ Peter Corke 2007
 ######################
 #   Import Section   #
 ######################
-
+"""
 from numpy import *
 
 # Import Robot Constructor section
@@ -47,6 +47,7 @@ from dynamics import *
 #from puma560akb import *
 #from stanford import *
 #from twolink import *
+"""
 
 print("""
 Robotics Toolbox for Python
