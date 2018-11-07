@@ -30,7 +30,7 @@ def fkine(robot, q):
     C{fkine} returns a 4x4 homogeneous transformation for the tool of
     the manipulator.
 
-    If C{q} is a matrix, the rows are interpretted as the generalized 
+    If C{q} is a matrix, the rows are interpretted as the generalized
     joint coordinates for a sequence of points along a trajectory.  q[i,j] is
     the j'th joint parameter for the i'th trajectory point.  In this case
     C{fkine} returns a list of matrices for each point
@@ -38,7 +38,7 @@ def fkine(robot, q):
 
     The robot's base or tool transform, if present, are incorporated into the
     result.
-    
+
     @type robot: Robot instance
     @param robot: The robot
     @type q: vector
@@ -79,7 +79,7 @@ def ikine(robot, tr, q0=None, m=None, **args):
 
     Uniqueness
     ==========
-    Note that the inverse kinematic solution is generally not unique, and 
+    Note that the inverse kinematic solution is generally not unique, and
     depends on the initial guess C{q} (which defaults to 0).
 
     Iterative solution
@@ -87,17 +87,17 @@ def ikine(robot, tr, q0=None, m=None, **args):
     Solution is computed iteratively using the pseudo-inverse of the
     manipulator Jacobian.
 
-    Such a solution is completely general, though much less efficient 
+    Such a solution is completely general, though much less efficient
     than specific inverse kinematic solutions derived symbolically.
 
-    This approach allows a solution to obtained at a singularity, but 
+    This approach allows a solution to obtained at a singularity, but
     the joint angles within the null space are arbitrarily assigned.
 
     Operation on a trajectory
     =========================
     If C{tr} is a list of transforms (a trajectory) then the solution is calculated
     for each transform in turn.  The return values is a matrix with one row for each
-    input transform.  The initial estimate for the iterative solution at 
+    input transform.  The initial estimate for the iterative solution at
     each time step is taken as the solution from the previous time step.
 
     Fewer than 6DOF
@@ -105,7 +105,7 @@ def ikine(robot, tr, q0=None, m=None, **args):
     If the manipulator has fewer than 6 DOF then this method of solution
     will fail, since the solution space has more dimensions than can
     be spanned by the manipulator joint coordinates.  In such a case
-    it is necessary to provide a mask matrix, C{m}, which specifies the 
+    it is necessary to provide a mask matrix, C{m}, which specifies the
     Cartesian DOF (in the wrist coordinate frame) that will be ignored
     in reaching a solution.  The mask matrix has six elements that
     correspond to translation in X, Y and Z, and rotation about X, Y and
@@ -128,19 +128,19 @@ def ikine(robot, tr, q0=None, m=None, **args):
     @return: joint coordinate
     @see: L{fkine}, L{tr2diff}, L{jacbo0}, L{ikine560}
     """
-     
+
     #solution control parameters
 
-    print 'args', args
-    
+    print ('args', args)
+
     n = robot.n
 
-    
+
     if q0 == None:
         q0 = mat(zeros((n,1)))
     else:
         q0 = mat(q0).flatten().T
-        
+
     if q0 != None and m != None:
         m = mat(m).flatten().T
         if len(m)!=6:
@@ -149,11 +149,11 @@ def ikine(robot, tr, q0=None, m=None, **args):
             error('Mask matrix must have same number of 1s as robot DOF')
     else:
         if n<6:
-            print 'For a manipulator with fewer than 6DOF a mask matrix argument should be specified'
+            print ('For a manipulator with fewer than 6DOF a mask matrix argument should be specified')
         m = mat(ones((6,1)))
 
     def solve(robot, tr, q, mask, ilimit=1000, stol=1e-6, gamma=1):
-        print ilimit, stol, gamma
+        print (ilimit, stol, gamma)
         nm = inf;
         count = 0
         while nm > stol:
@@ -165,7 +165,7 @@ def ikine(robot, tr, q0=None, m=None, **args):
             count += 1
             if count > ilimit:
                 error("Solution wouldn't converge")
-        print count, 'iterations'
+        print (count, 'iterations')
         return q;
 
     if isinstance(tr, list):
@@ -178,7 +178,7 @@ def ikine(robot, tr, q0=None, m=None, **args):
     elif ishomog(tr):
         #single xform case
         q = solve(robot, tr, q0, m, **args);
-        print q
+        print (q)
         qt = q.T
         return qt
     else:
@@ -196,7 +196,7 @@ def ikine560(robot, T, configuration=''):
        - 'n' or 'f'    wrist flip or noflip.
 
     The default configuration is 'lun'.
-    
+
     Reference
     =========
 
@@ -233,7 +233,7 @@ def ikine560(robot, T, configuration=''):
 
     if not ishomog(T):
         error('T is not a homog xform');
-        
+
     L = robot.links;
     a1 = L[0].A;
     a2 = L[1].A;
@@ -252,7 +252,7 @@ def ikine560(robot, T, configuration=''):
     # undo base transformation
     T = linalg.inv(robot.base) * T;
 
-    # The following parameters are extracted from the Homogeneous 
+    # The following parameters are extracted from the Homogeneous
     # Transformation as defined in equation 1, p. 34
 
     Ox = T[0,1];
@@ -301,12 +301,12 @@ def ikine560(robot, T, configuration=''):
 
 
     theta = zeros( (6,1) );
-    
+
     #
     # Solve for theta(1)
-    # 
+    #
     # r is defined in equation 38, p. 39.
-    # theta(1) uses equations 40 and 41, p.39, 
+    # theta(1) uses equations 40 and 41, p.39,
     # based on the configuration parameter n1
     #
 
@@ -323,7 +323,7 @@ def ikine560(robot, T, configuration=''):
     # V114 is defined in equation 43, p.39.
     # r is defined in equation 47, p.39.
     # Psi is defined in equation 49, p.40.
-    # theta(2) uses equations 50 and 51, p.40, based on the configuration 
+    # theta(2) uses equations 50 and 51, p.40, based on the configuration
     # parameter n2
     #
 
@@ -353,7 +353,7 @@ def ikine560(robot, T, configuration=''):
     # V113 is defined in equation 62, p. 41.
     # V323 is defined in equation 62, p. 41.
     # V313 is defined in equation 62, p. 41.
-    # theta(4) uses equation 61, p.40, based on the configuration 
+    # theta(4) uses equation 61, p.40, based on the configuration
     # parameter n4
     #
 
@@ -370,7 +370,7 @@ def ikine560(robot, T, configuration=''):
     # den is defined in equation 65, p. 41.
     # theta(5) uses equation 66, p. 41.
     #
-     
+
     num = -cos(theta[3])*V313 - V323*sin(theta[3]);
     den = -V113*sin(theta[1]+theta[2]) + Az*cos(theta[1]+theta[2]);
     theta[4] = atan2(num,den);
@@ -400,5 +400,5 @@ def ikine560(robot, T, configuration=''):
     den = - V432;
     theta[5] = atan2(num,den);
     #[num den]
-    
+
     return mat(theta).T;
