@@ -10,11 +10,13 @@ Peter Corke 2007
 
 from numpy import *
 
+# Import Robot Constructor section
+from Robot import *
+
 # Import Link Constructor section
 from Link import *
 
-# Import Robot Constructor section
-from Robot import *
+
 
 # utility
 from utility import *
