@@ -11,7 +11,7 @@ the authors is made.
 
 from numpy import *
 from robot.utility import *
-import robot.transform as T
+import transform as T
 import copy
 
 # Copyright (C) 1999-2002, by Peter I. Corke
