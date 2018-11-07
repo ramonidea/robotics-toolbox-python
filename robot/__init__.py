@@ -1,12 +1,3 @@
-__doc__ = """
-The Robotics Toolbox for Python
-Based on the Matlab version
-Peter Corke 2007
-"""
-
-######################
-#   Import Section   #
-######################
 """
 from numpy import *
 
@@ -47,9 +38,9 @@ from dynamics import *
 #from puma560akb import *
 #from stanford import *
 #from twolink import *
-"""
 
-print("""
+
+
 Robotics Toolbox for Python
 Based on Matlab Toolbox Version 7  April-2002
 
@@ -120,4 +111,4 @@ Creation of robot models.
   robot       - construct a robot object 
   stanford    - Stanford arm data 
   twolink     - simple 2-link example 
-""")
+  """
